@@ -12,13 +12,14 @@ input{
     border:none;
 }
 .card{
-    background-image: linear-gradient(to right,#FFC2C2,#FFD7A8);
+    /* background-image: linear-gradient(to right,#FFC2C2,#FFD7A8); */
 }
 .card-header{
-    background-color: lightsalmon;
+    /* background-color: lightsalmon; */
 }
-div{
-   /* background-color: #FFD7A8; */
+/* }
+body{
+   background-color: #FFD7A8;
     background-image: linear-gradient(to left,#FFC2C2,#FFD7A8);
     background-image: url('food.jpg');
     -webkit-background-size:cover;
@@ -26,7 +27,7 @@ div{
     -o-background-size:cover;
     background-size:  cover;
     
-}
+} */
 .nav{
     margin-left: 5rem;
     display: flex;
@@ -43,5 +44,5 @@ div{
     margin-left: 5rem;
 }
 .card-title{
-    color:aliceblue;
+    /* color:aliceblue; */
 }
