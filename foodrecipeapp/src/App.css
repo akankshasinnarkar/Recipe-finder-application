@@ -27,6 +27,15 @@
 .App-link {
   color: #61dafb;
 }
+.auth-wrapper{
+  /* background-color: #2F4F4F; */
+  /* background-image: linear-gradient(to right,#FFEFD5,#FFDAB9); */
+  background-image: url('food.jpg');
+  -webkit-background-size:cover;
+  -moz-background-size:cover;
+  -o-background-size:cover;
+  background-size:  cover;
+}
 
 @keyframes App-logo-spin {
   from {
