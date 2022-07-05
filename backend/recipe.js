@@ -70,7 +70,8 @@ app.post('/getrecipe',function(req,res){
 	let recipeName = {
 		dishName: req.body.dishName
 	};
-	RecipeModel.findOne(recipeName,(err,result)=>{
+RecipeModel.findOne(recipeName,(err,recipe)=>{
+    let success = false;
 		if(err){
 			console.log(err);
 			res.status(503);
@@ -80,24 +81,35 @@ app.post('/getrecipe',function(req,res){
 				msg: 'something went wrong'
 			});
 		}else{
-			if(result==null){
+			if(recipe==null){
 				res.status(404);
 				res.json({
 					flag: false,
-					data:null,
+					recipe,
 					msg: 'recipe doesnt exists'
 				});
 			}else{
+                success = true;
 				res.status(200);
-				res.json({
-					flag: true,
-					data:result,
-					msg: 'recipe data sent'
-				});
+				res.json({recipe,success});
 			}
 		}
 	});
 });
+
+app.get('/yar',(req,res) => {
+    res.send("Yar");
+})
+
+app.get('/getAllRecipes',async (req,res) =>  {
+    try{
+    let recipes =   await RecipeModel.find({});
+    res.json(recipes);
+    }
+    catch(error){
+        res.json(error);
+    }
+})
 app.get('/recipe',(req,res)=>{
 	res.json({msg:'abc',flag:true});
 });
