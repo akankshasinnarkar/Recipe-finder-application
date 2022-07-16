@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
+import './Login.css';
 export default class Login extends Component {
   render() {
     return (
-      <form>
+      <div className='login-box'>
+      <form className='login-form'>
         <h3>Sign In</h3>
         <div className="mb-3">
           <label>Email address</label>
@@ -41,6 +43,7 @@ export default class Login extends Component {
           Forgot <a href="#">password?</a>
         </p>
       </form>
+      </div>
     )
   }
 }

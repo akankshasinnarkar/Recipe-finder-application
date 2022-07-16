@@ -97,9 +97,9 @@ RecipeModel.findOne(recipeName,(err,recipe)=>{
 	});
 });
 
-app.get('/yar',(req,res) => {
-    res.send("Yar");
-})
+// app.get('/yar',(req,res) => {
+//     res.send("Yar");
+// })
 
 app.get('/getAllRecipes',async (req,res) =>  {
     try{

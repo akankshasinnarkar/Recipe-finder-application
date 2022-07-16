@@ -1,6 +1,7 @@
 import React from "react";
 import RecipeContext from "../../context/recipes/recipeContext";
 import { useState,useContext } from "react";
+import { Link } from "react-router-dom";
 
 
 const Navbar = () => {
@@ -56,6 +57,14 @@ const goToHome = () => {
       <nav className="navbar navbar-dark bg-dark justify-content-between">
   <a className="navbar-brand" style={{"cursor":"pointer"}} onClick={goToHome} ><h3>What to Eat?</h3></a>
   <form className="form-inline d-flex">
+  <Link to="/login" className="btn btn-outline-success my-2 my-sm-0" >
+                  {" "}
+                  Login
+                </Link>
+                <Link to="signup" className="btn btn-outline-success my-2 my-sm-0">
+                  {" "}
+                  SignUp
+                </Link>
     <input className="form-control mr-sm-2"  id="dish" type="search" placeholder="Search" aria-label="Search" value={recipeName} onChange={onChange}/>
     <button onClick={handleClick}  className="btn btn-outline-success my-2 my-sm-0" >Search</button>
   </form>

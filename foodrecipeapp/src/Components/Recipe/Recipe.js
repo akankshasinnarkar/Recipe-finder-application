@@ -4,6 +4,7 @@ import RecipeContext from "../../context/recipes/recipeContext";
 import RecipeState from "../../context/recipes/RecipeState";
 import RecipeItem from "./RecipeItem";
 import butterchicken from "./butter-chicken.png";
+import '../../App.css';
 
 import "./Recipe.css";
 export default function Recipe(props) {
@@ -29,7 +30,7 @@ export default function Recipe(props) {
     getAllRecipes();
   }, []);
   return (
-    <div>
+    <div >
       <button
         style={{ display: "none" }}
         type="button"
