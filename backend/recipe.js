@@ -6,28 +6,41 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cors());
 
+const router = express.Router();
+// const User = require("../models/User");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+//const fetchUser = require('../middleware/fetchUser');
+
+const { body, validationResult } = require("express-validator");
+
+const JWT_SECRET = "Thisisajwtsecrettokenforthejwttokens";
+
+
 const mongoose = require('mongoose');
 
 mongoose.connect('mongodb://127.0.0.1:27017/mydb');
 
 const connection = mongoose.connection;
 
-let userSchema = new mongoose.Schema({
-    username: String,
+let reactUserSchema = new mongoose.Schema({
+    firstname: String,
+    lastname: String,
     email: String,
-    mob: String,
     password: String
+   
+    
 });
-let userModel = connection.model('user',userSchema);
+let reactUserModel = connection.model('reactUser',reactUserSchema);
 
-app.post('/login1',(req,res)=>{
-    let userData = {
-        username: req.body.username,
+app.post('/login',(req,res)=>{
+    let reactUserData = {
+        email: req.body.email,
        
         password: req.body.pwd
     }
 
- userModel.find(userData,(err,result)=>{
+ reactUserModel.find(reactUserData,(err,result)=>{
        console.log(result.length);
        if(result.length>0){
         res.redirect('http://localhost:3001/recipe.html');
@@ -38,23 +51,68 @@ app.post('/login1',(req,res)=>{
     });
 });
 
-app.post('/signup',(req,res)=>{
-    let userData = {
-        username: req.body.username,
-        email: req.body.email,
-        mob: req.body.mob,
-        password: req.body.password
+app.post(
+    "/signup",
+    [
+        body("First name", "Enter a valid First name ").isLength({ min: 5}),
+        body(" Last name", "Enter a valid Last name ").isLength({ min: 5 }),
+      body("email", "Enter a valid email").isEmail(),
+  
+     
+      body("password", "Password must be of atleast 5 characters").isLength({
+        min: 5,
+      }),
+    ],
+    async (req, res) => {
+  
+      let success =false;
+      // If there are errors => return bad request and errors
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        
+        return res.status(400).json({ errors: errors.array() ,success});
+        // res.redirect('http://localhost:3001/signup.html');
+      }
+  
+      try {
+        // Check whether the user with same email exists already
+        let checkUser = await reactUser.findOne({ email: req.body.email });
+  
+        if (checkUser) {
+          return res.status(400).json({ error: "Email already registered",success });
+        }
+  
+        // Encrypting password
+        const salt = await bcrypt.genSalt(10);
+        const secPassword = await bcrypt.hash(req.body.password, salt);
+  
+        // Creating a new user
+        let reactUser = await reactUser.create({
+          firstname: req.body.firstname,
+          lastname: req.body.lastname,
+          email: req.body.email,
+  
+          password: secPassword,
+        });
+  
+        const data = {
+          reactUser: {
+            id: reactUser.id,
+          },
+        };
+  
+        const authToken = jwt.sign(data, JWT_SECRET);
+  
+        console.log(authToken);
+        success = true;
+  
+        res.json({ authToken,success });
+      } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Some error occurred");
+      }
     }
-
-console.log(userData);
-    userModel.create(userData,(err,result)=>{
-        console.log(result);
-        if(err)
-            res.redirect('http://localhost:3001/signup.html');
-        else
-            res.redirect('http://localhost:3001/login1.html');
-    });
-});
+  );
 
 let recipeSchema= new mongoose.Schema({
     dishName:String,
