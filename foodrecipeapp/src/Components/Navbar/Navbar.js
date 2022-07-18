@@ -78,7 +78,7 @@ const handleLogOut = () => {
 }
 {
   localStorage.getItem('token') && <>
-  <button onClick={handleLogOut} className="btn btn-primary mx-3">Logout</button>
+  <button onClick={handleLogOut} className="btn btn-outline-success my-2 my-sm-0">Logout</button>
 
   
 
