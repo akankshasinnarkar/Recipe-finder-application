@@ -42,10 +42,10 @@ function App() {
         <div > */}
           <div >
             <Routes>
-              <Route exact path="/" element={<Login />} />
+              <Route exact path="/" element={<Recipe />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
-              <Route path="/Recipe" element={ <Recipe/>} />
+              
             </Routes>
           </div>
         {/* </div> */}

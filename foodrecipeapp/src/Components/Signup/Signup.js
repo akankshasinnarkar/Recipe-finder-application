@@ -1,36 +1,46 @@
-import React, { Component } from 'react'
+import React, { Component,useEffect } from 'react'
 import './Signup.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 const SignUp = (props) => {
 
-    const [creds, setCreds] = useState({email:"",password:"",cpassword:"",name:""}); 
+    const [creds, setCreds] = useState({email:"",password:"",cpassword:"",fname:"",lname:""}); 
     const onChange = (e)=> {
         setCreds({...creds,
         [e.target.name] : e.target.value});
     }
 
+    useEffect(() => {
+
+      if(localStorage.getItem('token')){
+        history('/');
+      }
+
+
+     
+    }, []);
     let history = useNavigate();
     const handleSubmit = async (e) =>{
 
         e.preventDefault();
 
-        const {name,email,password,cpassword} = creds ;
+        const {email,password,cpassword,fname,lname} = creds ;
 
         if(password !== cpassword){
-            props.showAlert(`Passwords do not match`,'danger');
+          //  props.showAlert(`Passwords do not match`,'danger');
+          console.log('Password not matching')
             return 
 
         }
         e.preventDefault();
-        let url = `http://localhost:5000/api/auth/createuser`;
+        let url = `http://localhost:3001/signup`;
         const response = await fetch(url, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body : JSON.stringify({name,email,password})
+            body : JSON.stringify({fname,lname,email,password})
           });
       
           const json =  await response.json();
@@ -39,13 +49,15 @@ const SignUp = (props) => {
           if(json.success){
 
             localStorage.setItem('token',json.authToken);
-            props.showAlert(`Successfully Created Account`,'success');
+           // props.showAlert(`Successfully Created Account`,'success');
+           console.log('Success login')
             history('/');
             
 
           }
           else{
-            props.showAlert(`Invalid Credentials ${json.error}`,'danger');
+            // props.showAlert(`Invalid Credentials ${json.error}`,'danger');
+            console.log(json.error)
           }
 
     }
@@ -53,7 +65,7 @@ const SignUp = (props) => {
   
     return (
       <div className='signup-box'>
-      <form className='signup-form'>
+      <form className='signup-form' onSubmit={handleSubmit}>
         <h3>Sign Up</h3>
         <div className="mb-3">
           <label>First name</label>
@@ -61,18 +73,22 @@ const SignUp = (props) => {
             type="text"
             className="form-control"
             placeholder="First name"
+            name = "fname"
+            onChange={onChange}
           />
         </div>
         <div className="mb-3">
           <label>Last name</label>
-          <input type="text" className="form-control" placeholder="Last name" />
+          <input onChange={onChange} type="text" className="form-control" placeholder="Last name" name='lname'/>
         </div>
         <div className="mb-3">
           <label>Email address</label>
           <input
             type="email"
+            onChange={onChange}
             className="form-control"
             placeholder="Enter email"
+            name="email"
           />
         </div>
         <div className="mb-3">
@@ -81,6 +97,18 @@ const SignUp = (props) => {
             type="password"
             className="form-control"
             placeholder="Enter password"
+            name='password'
+            onChange={onChange}
+          />
+        </div>
+        <div className="mb-3">
+          <label>Confirm Password</label>
+          <input
+            type="password"
+            className="form-control"
+            placeholder="Enter password"
+            name='cpassword'
+            onChange={onChange}
           />
         </div>
         <div className="d-grid">
