@@ -33,29 +33,71 @@ let reactUserSchema = new mongoose.Schema({
 });
 let reactUserModel = connection.model('reactUser',reactUserSchema);
 
-app.post('/login',(req,res)=>{
-    let reactUserData = {
-        email: req.body.email,
-       
-        password: req.body.pwd
+
+app.post(
+  "/login",
+  [
+    body("email", "Enter a valid email").isEmail(),
+    body("password", "Password cannot be blank").exists(),
+  ],
+  async (req, res) => {
+    // If there are errors => return bad request and errors
+    const errors = validationResult(req);
+    let success =false;
+    if (!errors.isEmpty()) {
+      success = false;
+      return res.status(400).json({ success,errors: errors.array() });
     }
 
- reactUserModel.find(reactUserData,(err,result)=>{
-       console.log(result.length);
-       if(result.length>0){
-        res.redirect('http://localhost:3001/recipe.html');
-       }
-       else{
-        res.redirect('http://localhost:3001/login1.html');  
-       }
-    });
-});
+    const { email, password } = req.body;
+
+    try {
+      let user = await reactUserModel.findOne({ email });
+      success = false;
+
+      if (!user) {
+        return res
+          .status(400)
+          .json({
+            error:
+              "Incorrect Credentials ! Try to login with correct credentials",
+              success
+          });
+      }
+
+      const passwordCompare = await bcrypt.compare(password, user.password);
+
+      if (!passwordCompare) {
+        return res
+          .status(400)
+          .json({
+            error:
+              "Incorrect Credentials ! Try to login with correct credentials",
+              success
+          });
+      }
+
+      const data = {
+        user: {
+          id: user.id,
+        },
+      };
+
+      const authToken = jwt.sign(data, JWT_SECRET);
+      success = true;
+      res.json({success,authToken });
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+);
 
 app.post(
     "/signup",
     [
-        body("First name", "Enter a valid First name ").isLength({ min: 5}),
-        body(" Last name", "Enter a valid Last name ").isLength({ min: 5 }),
+        body("fname", "Enter a valid First name ").isLength({ min: 5}),
+        body("lname", "Enter a valid Last name ").isLength({ min: 5 }),
       body("email", "Enter a valid email").isEmail(),
   
      
@@ -76,7 +118,7 @@ app.post(
   
       try {
         // Check whether the user with same email exists already
-        let checkUser = await reactUser.findOne({ email: req.body.email });
+        let checkUser = await reactUserModel.findOne({ email: req.body.email });
   
         if (checkUser) {
           return res.status(400).json({ error: "Email already registered",success });
@@ -87,9 +129,9 @@ app.post(
         const secPassword = await bcrypt.hash(req.body.password, salt);
   
         // Creating a new user
-        let reactUser = await reactUser.create({
-          firstname: req.body.firstname,
-          lastname: req.body.lastname,
+        let reactUser = await reactUserModel.create({
+          firstname: req.body.fname,
+          lastname: req.body.lname,
           email: req.body.email,
   
           password: secPassword,

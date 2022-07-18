@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component,useEffect } from 'react'
 import './Login.css';
 //export default class Login extends Component {
  
@@ -17,12 +17,22 @@ const Login = (props) => {
         [e.target.name] : e.target.value});
     }
 
+    useEffect(() => {
+
+      if(localStorage.getItem('token')){
+        history('/');
+      }
+
+
+     
+    }, []);
+
 
     
 
     const handleSubmit = async (e) =>{
         e.preventDefault();
-        let url = `http://localhost:5000/api/auth/login`;
+        let url = `http://localhost:3001/login`;
         const response = await fetch(url, {
             method: "POST",
             headers: {
@@ -38,12 +48,16 @@ const Login = (props) => {
 
             localStorage.setItem('token',json.authToken);
             // localStorage.setItem('token2',json.authToken2);
-            props.showAlert(`Successfully Logged In`,'success');
+            // props.showAlert(`Successfully Logged In`,'success');
+
+            console.log("valid  login !!!!! ")
             history('/');
 
           }
           else{
-            props.showAlert(`Invalid Credentials ${json.error}`,'danger');
+            // props.showAlert(`Invalid Credentials ${json.error}`,'danger');
+
+            console.log("Invalid login ")
 
           }
 
@@ -51,7 +65,7 @@ const Login = (props) => {
   
     return (
       <div className='login-box'>
-      <form className='login-form'>
+      <form className='login-form' onSubmit={handleSubmit}>
         <h3>Sign In</h3>
         <div className="mb-3">
           <label>Email address</label>
@@ -60,6 +74,8 @@ const Login = (props) => {
             className="form-control"
             
             placeholder="Enter email"
+            onChange={onChange}
+            name="email"
           />
         </div>
         <div className="mb-3">
@@ -69,28 +85,17 @@ const Login = (props) => {
             className="form-control"
             
             placeholder="Enter password"
+            onChange={onChange}
+            name="password"
           />
         </div>
-        <div className="mb-3">
-          <div className="custom-control custom-checkbox">
-            <input
-              type="checkbox"
-              className="custom-control-input"
-              id="customCheck1"
-            />
-            <label className="custom-control-label" htmlFor="customCheck1">
-              Remember me
-            </label>
-          </div>
-        </div>
+       
         <div className="d-grid">
           <button type="submit" className="btn btn-primary" >
             Submit
           </button>
         </div>
-        <p className="forgot-password text-right">
-          Forgot <a href="#">password?</a>
-        </p>
+        
       </form>
       </div>
     )

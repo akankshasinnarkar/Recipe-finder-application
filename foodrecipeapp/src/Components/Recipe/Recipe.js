@@ -4,6 +4,7 @@ import RecipeContext from "../../context/recipes/recipeContext";
 import RecipeState from "../../context/recipes/RecipeState";
 import RecipeItem from "./RecipeItem";
 import butterchicken from "./butter-chicken.png";
+import { useNavigate } from 'react-router-dom';
 import '../../App.css';
 
 import "./Recipe.css";
@@ -14,6 +15,7 @@ export default function Recipe(props) {
   const { recipes, getAllRecipes } = context;
 
   const ref = useRef();
+  let history = useNavigate();
 
   const [currentRecipe, setCurrentRecipe] = useState({
     dishName: "",
@@ -27,7 +29,15 @@ export default function Recipe(props) {
   };
 
   useEffect(() => {
+
+    if(localStorage.getItem('token')){
     getAllRecipes();
+    }
+    else{
+
+      history('/login');
+
+    }
   }, []);
   return (
     <div >
