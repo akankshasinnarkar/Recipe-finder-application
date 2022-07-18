@@ -55,7 +55,7 @@ const goToHome = () => {
     <div>
       
       <nav className="navbar navbar-dark bg-dark justify-content-between">
-  <a className="navbar-brand" style={{"cursor":"pointer"}} onClick={goToHome} ><h3>What to Eat?</h3></a>
+  <a className="navbar-brand" style={{"cursor":"pointer"}} onClick={goToHome} ><h1> What2Eat !</h1></a>
   <form className="form-inline d-flex">
   <Link to="/login" className="btn btn-outline-success my-2 my-sm-0" >
                   {" "}

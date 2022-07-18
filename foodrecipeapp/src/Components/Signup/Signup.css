@@ -1,0 +1,23 @@
+.signup-box{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* height: 100vh; */
+    /* width: 100vw; */
+    
+  }
+  .signup-form{
+    background-color:white ;
+    display: flex;
+    flex-direction: column;
+    padding: 2.1875rem;
+    margin: 2rem;
+    width: 40%;
+    border: 0.06rem solid;
+    box-shadow: 0.313rem 0.625rem 0.5rem 0.625rem black;
+    border-radius: 10%;
+    border: none;
+  
+  
+  }

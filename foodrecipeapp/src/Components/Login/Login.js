@@ -1,7 +1,54 @@
 import React, { Component } from 'react'
 import './Login.css';
-export default class Login extends Component {
-  render() {
+//export default class Login extends Component {
+ 
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+
+const Login = (props) => {
+
+    const [creds, setCreds] = useState({email:"",password:""});
+
+    let history = useNavigate();
+
+    const onChange = (e)=> {
+        setCreds({...creds,
+        [e.target.name] : e.target.value});
+    }
+
+
+    
+
+    const handleSubmit = async (e) =>{
+        e.preventDefault();
+        let url = `http://localhost:5000/api/auth/login`;
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body : JSON.stringify({email:creds.email,password:creds.password})
+          });
+      
+          const json =  await response.json();
+          console.log(json);
+
+          if(json.success){
+
+            localStorage.setItem('token',json.authToken);
+            // localStorage.setItem('token2',json.authToken2);
+            props.showAlert(`Successfully Logged In`,'success');
+            history('/');
+
+          }
+          else{
+            props.showAlert(`Invalid Credentials ${json.error}`,'danger');
+
+          }
+
+    }
+  
     return (
       <div className='login-box'>
       <form className='login-form'>
@@ -11,6 +58,7 @@ export default class Login extends Component {
           <input
             type="email"
             className="form-control"
+            
             placeholder="Enter email"
           />
         </div>
@@ -19,6 +67,7 @@ export default class Login extends Component {
           <input
             type="password"
             className="form-control"
+            
             placeholder="Enter password"
           />
         </div>
@@ -35,7 +84,7 @@ export default class Login extends Component {
           </div>
         </div>
         <div className="d-grid">
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-primary" >
             Submit
           </button>
         </div>
@@ -45,5 +94,6 @@ export default class Login extends Component {
       </form>
       </div>
     )
-  }
+
 }
+export default Login
