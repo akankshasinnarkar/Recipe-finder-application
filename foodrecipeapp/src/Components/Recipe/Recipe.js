@@ -182,7 +182,9 @@ export default function Recipe(props) {
       console.log(data);
       setData(data);
     } else {
-      alert("Recipe not found");
+      //alert("Recipe not found");
+      console.log("I have found the error")
+      props.showAlert('Recipe not found','danger');
     }
   }
 }

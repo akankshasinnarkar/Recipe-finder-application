@@ -4,6 +4,7 @@ import './Login.css';
  
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Alert from '../Alert/Alert';
 
 
 const Login = (props) => {
@@ -48,14 +49,14 @@ const Login = (props) => {
 
             localStorage.setItem('token',json.authToken);
             // localStorage.setItem('token2',json.authToken2);
-            // props.showAlert(`Successfully Logged In`,'success');
+             props.showAlert(`Successfully Logged In`,'success');
 
             console.log("valid  login !!!!! ")
             history('/');
 
           }
           else{
-            // props.showAlert(`Invalid Credentials ${json.error}`,'danger');
+             props.showAlert(`Invalid Credentials ${json.error}`,'danger');
 
             console.log("Invalid login ")
 
