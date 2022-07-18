@@ -28,7 +28,7 @@ const SignUp = (props) => {
         const {email,password,cpassword,fname,lname} = creds ;
 
         if(password !== cpassword){
-          //  props.showAlert(`Passwords do not match`,'danger');
+            props.showAlert(`Passwords do not match`,'danger');
           console.log('Password not matching')
             return 
 
@@ -49,14 +49,14 @@ const SignUp = (props) => {
           if(json.success){
 
             localStorage.setItem('token',json.authToken);
-           // props.showAlert(`Successfully Created Account`,'success');
+            props.showAlert(`Successfully Created Account`,'success');
            console.log('Success login')
             history('/');
             
 
           }
           else{
-            // props.showAlert(`Invalid Credentials ${json.error}`,'danger');
+             props.showAlert(`Invalid Credentials ${json.error}`,'danger');
             console.log(json.error)
           }
 

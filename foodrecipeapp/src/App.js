@@ -6,15 +6,33 @@ import RecipeState from './context/recipes/RecipeState';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import Login from './Components/Login/Login';
 import SignUp from './Components/Signup/Signup';
+import Alert from './Components/Alert/Alert';
+import { useState } from 'react';
+
+
 
 function App() {
+
+  const [alert, setAlert] = useState({message:"",type:""});
+
+  const showAlert = (message, type) => {
+    setAlert({
+      type,
+      message,
+    });
+
+    setTimeout(() => {
+      setAlert({message:"",type:""});
+    }, 5000);
+  };
   return (
     
     
     <Router>
       <div className='App'>
       <RecipeState>
-      <Navbar/>
+      <Navbar showAlert = {showAlert}/>
+      <Alert alert={alert} />
       
      
       {/* <div > */}
@@ -42,9 +60,9 @@ function App() {
         <div > */}
           <div >
             <Routes>
-              <Route exact path="/" element={<Recipe />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<SignUp />} />
+              <Route exact path="/" element={<Recipe  showAlert={showAlert}/>} />
+              <Route path="/login" element={<Login showAlert={showAlert} />} />
+              <Route path="/signup" element={<SignUp showAlert={showAlert} />} />
               
             </Routes>
           </div>

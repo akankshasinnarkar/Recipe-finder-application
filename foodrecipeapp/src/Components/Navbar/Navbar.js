@@ -4,7 +4,7 @@ import { useState,useContext } from "react";
 import { Link,useNavigate } from "react-router-dom";
 
 
-const Navbar = () => {
+const Navbar = (props) => {
 
     
 
@@ -55,7 +55,7 @@ const handleLogOut = () => {
           setRecipes([data.recipe]);
     
         } else {
-          alert("Recipe not found");
+          props.showAlert('Recipe not found','danger')
         }
       }
   const [data, setData] = useState({ flag: false, data: null });
